@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semester 3 | Important Questions</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #080808;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  text-align: center;
+  padding: 35px 15px;
+  border-bottom: 1px solid #252525;
+}
+header h1 { letter-spacing: 3px; margin-bottom: 8px; }
+header p { color: #888; font-size: 13px; }
+main { max-width: 700px; margin: auto; padding: 25px 18px; }
+h2 { font-size: 20px; }
+.subject {
+  background: #171717;
+  border: 1px solid #292929;
+  border-radius: 12px;
+  padding: 19px;
+  margin: 12px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.subject:hover { background: #222; }
+.unit, .mark {
+  background: #171717;
+  border: 1px solid #292929;
+  border-radius: 10px;
+  padding: 17px;
+  margin: 12px 0;
+  cursor: pointer;
+}
+button {
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.back {
+  background: #222;
+  color: white;
+  margin-bottom: 18px;
+}
+footer {
+  text-align: center;
+  color: #777;
+  padding: 25px;
+  border-top: 1px solid #252525;
+  margin-top: 35px;
+}
+footer button {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  font-weight: normal;
+}
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SEMESTER 3</h1>
+  <p>IMPORTANT QUESTIONS PORTAL</p>
+</header>
+
+<main>
+  <section id="home">
+    <h2>Select Your Subject</h2>
+    <div id="subjects"></div>
+  </section>
+
+  <section id="units" class="hidden">
+    <button class="back" onclick="goHome()">← Back</button>
+    <h2 id="subjectTitle"></h2>
+    <p style="color:#888">Select a unit</p>
+    <div id="unitList"></div>
+  </section>
+
+  <section id="marks" class="hidden">
+    <button class="back" onclick="goUnits()">← Back</button>
+    <h2 id="unitTitle"></h2>
+    <div class="mark" onclick="showQuestions(2)">
+      <h3>2 Marks Questions →</h3>
+    </div>
+    <div class="mark" onclick="showQuestions(5)">
+      <h3>5 Marks Questions →</h3>
+    </div>
+  </section>
+
+  <section id="questions" class="hidden">
+    <button class="back" onclick="goMarks()">← Back</button>
+    <h2 id="questionTitle"></h2>
+    <div id="questionList"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Made for Semester 3 students</p>
+  <button onclick="alert('Admin login will be connected to secure authentication in the next step.')">
+    Admin Login 🔒
+  </button>
+</footer>
+
+<script>
+const subjects = [
+  "Mathematics",
+  "Python",
+  "DBMS",
+  "Software Engineering",
+  "E.V.S."
+];
+
+let selectedSubject = "";
+let selectedUnit = 1;
+let selectedMarks = 2;
+
+// Five units are initial placeholders.
+// These can be changed to match your syllabus.
+const units = [1, 2, 3, 4, 5];
+
+const questions = {};
+
+function show(id) {
+  ["home","units","marks","questions"].forEach(x =>
+    document.getElementById(x).classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
+}
+
+function renderSubjects() {
+  document.getElementById("subjects").innerHTML =
+    subjects.map(s => `
+      <div class="subject" onclick="openSubject('${s}')">
+        <strong>${s}</strong><span>→</span>
+      </div>
+    `).join("");
+}
+
+function openSubject(s) {
+  selectedSubject = s;
+  document.getElementById("subjectTitle").textContent = s;
+  document.getElementById("unitList").innerHTML =
+    units.map(u => `
+      <div class="unit" onclick="openUnit(${u})">
+        Unit ${u} <span style="float:right">→</span>
+      </div>
+    `).join("");
+  show("units");
+}
+
+function openUnit(u) {
+  selectedUnit = u;
+  document.getElementById("unitTitle").textContent =
+    selectedSubject + " - Unit " + u;
+  show("marks");
+}
+
+function showQuestions(marks) {
+  selectedMarks = marks;
+  document.getElementById("questionTitle").textContent =
+    marks + " Marks Questions";
+
+  const key = `${selectedSubject}|${selectedUnit}|${marks}`;          
+  const list = questions[key] || [];
+
+  document.getElementById("questionList").innerHTML =
+    list.length
+      ? list.map((q,i) => `<div class="unit">${i+1}. ${q}</div>`).join("")
+      : '<p style="color:#888">Questions will be added soon.</p>';
+
+  show("questions");
+}
+
+function goHome() { show("home"); }
+function goUnits() { show("units"); }
+function goMarks() { show("marks"); }
+
+renderSubjects();
+</script>
+</body>
+</html>
