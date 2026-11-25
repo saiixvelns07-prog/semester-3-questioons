@@ -1,47 +1,52 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Semester 3 | Important Questions</title>
+
 <style>
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: #080808;
   color: white;
   font-family: Arial, sans-serif;
 }
+
 header {
   text-align: center;
   padding: 35px 15px;
   border-bottom: 1px solid #252525;
 }
+
 header h1 { letter-spacing: 3px; margin-bottom: 8px; }
 header p { color: #888; font-size: 13px; }
+
 main { max-width: 700px; margin: auto; padding: 25px 18px; }
+
 h2 { font-size: 20px; }
-.subject {
+
+.subject, .unit, .mark {
   background: #171717;
   border: 1px solid #292929;
   border-radius: 12px;
   padding: 19px;
   margin: 12px 0;
   cursor: pointer;
+}
+
+.subject {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.subject:hover { background: #222; }
-.unit, .mark {
-  background: #171717;
-  border: 1px solid #292929;
-  border-radius: 10px;
-  padding: 17px;
-  margin: 12px 0;
-  cursor: pointer;
+
+.subject:hover, .unit:hover, .mark:hover {
+  background: #222;
 }
+
 button {
   background: white;
   color: black;
@@ -50,12 +55,49 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  margin: 5px 3px;
 }
-.back {
+
+.back, .secondary {
   background: #222;
   color: white;
-  margin-bottom: 18px;
 }
+
+.danger {
+  background: #a52a2a;
+  color: white;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #171717;
+  color: white;
+  font-size: 15px;
+}
+
+.question {
+  background: #171717;
+  border: 1px solid #292929;
+  padding: 17px;
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-box {
+  background: #171717;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.hidden { display: none !important; }
+
 footer {
   text-align: center;
   color: #777;
@@ -63,15 +105,22 @@ footer {
   border-top: 1px solid #252525;
   margin-top: 35px;
 }
+
 footer button {
   background: transparent;
   color: #aaa;
   border: 1px solid #444;
   font-weight: normal;
 }
-.hidden { display: none; }
+
+#status {
+  color: #aaa;
+  font-size: 13px;
+  margin: 12px 0;
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -80,44 +129,124 @@ footer button {
 </header>
 
 <main>
-  <section id="home">
-    <h2>Select Your Subject</h2>
-    <div id="subjects"></div>
-  </section>
 
-  <section id="units" class="hidden">
-    <button class="back" onclick="goHome()">← Back</button>
-    <h2 id="subjectTitle"></h2>
-    <p style="color:#888">Select a unit</p>
-    <div id="unitList"></div>
-  </section>
+<section id="home">
+  <h2>Select Your Subject</h2>
+  <div id="subjects"></div>
+</section>
 
-  <section id="marks" class="hidden">
-    <button class="back" onclick="goUnits()">← Back</button>
-    <h2 id="unitTitle"></h2>
-    <div class="mark" onclick="showQuestions(2)">
-      <h3>2 Marks Questions →</h3>
-    </div>
-    <div class="mark" onclick="showQuestions(5)">
-      <h3>5 Marks Questions →</h3>
-    </div>
-  </section>
+<section id="units" class="hidden">
+  <button class="back" onclick="goHome()">← Back</button>
+  <h2 id="subjectTitle"></h2>
+  <p style="color:#888">Select a unit</p>
+  <div id="unitList"></div>
+</section>
 
-  <section id="questions" class="hidden">
-    <button class="back" onclick="goMarks()">← Back</button>
-    <h2 id="questionTitle"></h2>
-    <div id="questionList"></div>
-  </section>
+<section id="marks" class="hidden">
+  <button class="back" onclick="goUnits()">← Back</button>
+  <h2 id="unitTitle"></h2>
+
+  <div class="mark" onclick="showQuestions(2)">
+    <h3>2 Marks Questions →</h3>
+  </div>
+
+  <div class="mark" onclick="showQuestions(5)">
+    <h3>5 Marks Questions →</h3>
+  </div>
+</section>
+
+<section id="questions" class="hidden">
+  <button class="back" onclick="goMarks()">← Back</button>
+
+  <h2 id="questionTitle"></h2>
+  <p id="status"></p>
+
+  <div id="adminForm" class="admin-box hidden">
+    <h3>Add New Question</h3>
+
+    <textarea id="newQuestion"
+      placeholder="Write your important question here..."
+      rows="4"></textarea>
+
+    <button onclick="addQuestion()">Save Question</button>
+  </div>
+
+  <div id="questionList"></div>
+</section>
+
+<section id="login" class="hidden">
+  <button class="back" onclick="goHome()">← Back</button>
+
+  <h2>Admin Login 🔒</h2>
+
+  <form id="loginForm">
+    <input id="email" type="email"
+      placeholder="Admin Email" required>
+
+    <input id="password" type="password"
+      placeholder="Password" required>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="loginStatus"></p>
+</section>
+
 </main>
 
 <footer>
   <p>Made for Semester 3 students</p>
-  <button onclick="alert('Admin login will be connected to secure authentication in the next step.')">
+
+  <button id="adminButton" onclick="openLogin()">
     Admin Login 🔒
   </button>
+
+  <button id="logoutButton" class="hidden"
+    onclick="logout()">Logout</button>
 </footer>
 
-<script>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCmiJ0eEzrU4sz8gsJwUtphdm832Dk_5Wk",
+  authDomain: "semester-3-questions.firebaseapp.com",
+  projectId: "semester-3-questions",
+  storageBucket: "semester-3-questions.firebasestorage.app",
+  messagingSenderId: "535682834125",
+  appId: "1:535682834125:web:019bef6245deeede261384",
+  measurementId: "G-G6VGL503QX"
+};
+
+const ADMIN_UID = "PQlJOTW0nUW2xUW5djQtVKVn3472";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 const subjects = [
   "Mathematics",
   "Python",
@@ -126,72 +255,297 @@ const subjects = [
   "E.V.S."
 ];
 
+const units = [1, 2, 3, 4, 5];
+
 let selectedSubject = "";
 let selectedUnit = 1;
 let selectedMarks = 2;
-
-// Five units are initial placeholders.
-// These can be changed to match your syllabus.
-const units = [1, 2, 3, 4, 5];
-
-const questions = {};
+let isAdmin = false;
+let unsubscribeQuestions = null;
 
 function show(id) {
-  ["home","units","marks","questions"].forEach(x =>
-    document.getElementById(x).classList.add("hidden")
-  );
+  ["home","units","marks","questions","login"].forEach(x => {
+    document.getElementById(x).classList.add("hidden");
+  });
+
   document.getElementById(id).classList.remove("hidden");
 }
 
 function renderSubjects() {
-  document.getElementById("subjects").innerHTML =
-    subjects.map(s => `
-      <div class="subject" onclick="openSubject('${s}')">
-        <strong>${s}</strong><span>→</span>
-      </div>
-    `).join("");
+  const container = document.getElementById("subjects");
+  container.replaceChildren();
+
+  subjects.forEach(subject => {
+    const div = document.createElement("div");
+    div.className = "subject";
+
+    const name = document.createElement("strong");
+    name.textContent = subject;
+
+    const arrow = document.createElement("span");
+    arrow.textContent = "→";
+
+    div.append(name, arrow);
+    div.onclick = () => openSubject(subject);
+
+    container.appendChild(div);
+  });
 }
 
-function openSubject(s) {
-  selectedSubject = s;
-  document.getElementById("subjectTitle").textContent = s;
-  document.getElementById("unitList").innerHTML =
-    units.map(u => `
-      <div class="unit" onclick="openUnit(${u})">
-        Unit ${u} <span style="float:right">→</span>
-      </div>
-    `).join("");
+function openSubject(subject) {
+  selectedSubject = subject;
+
+  document.getElementById("subjectTitle").textContent = subject;
+
+  const container = document.getElementById("unitList");
+  container.replaceChildren();
+
+  units.forEach(unit => {
+    const div = document.createElement("div");
+    div.className = "unit";
+    div.textContent = "Unit " + unit + " →";
+    div.onclick = () => openUnit(unit);
+
+    container.appendChild(div);
+  });
+
   show("units");
 }
 
-function openUnit(u) {
-  selectedUnit = u;
+function openUnit(unit) {
+  selectedUnit = unit;
+
   document.getElementById("unitTitle").textContent =
-    selectedSubject + " - Unit " + u;
+    selectedSubject + " - Unit " + unit;
+
   show("marks");
 }
 
 function showQuestions(marks) {
   selectedMarks = marks;
+
   document.getElementById("questionTitle").textContent =
     marks + " Marks Questions";
 
-  const key = `${selectedSubject}|${selectedUnit}|${marks}`;          
-  const list = questions[key] || [];
-
-  document.getElementById("questionList").innerHTML =
-    list.length
-      ? list.map((q,i) => `<div class="unit">${i+1}. ${q}</div>`).join("")
-      : '<p style="color:#888">Questions will be added soon.</p>';
+  document.getElementById("adminForm").classList.toggle(
+    "hidden", !isAdmin
+  );
 
   show("questions");
+  loadQuestions();
 }
 
-function goHome() { show("home"); }
-function goUnits() { show("units"); }
-function goMarks() { show("marks"); }
+function loadQuestions() {
+  const container = document.getElementById("questionList");
+  const status = document.getElementById("status");
+
+  if (unsubscribeQuestions) {
+    unsubscribeQuestions();
+    unsubscribeQuestions = null;
+  }
+
+  status.textContent = "Loading questions...";
+  container.replaceChildren();
+
+  unsubscribeQuestions = onSnapshot(
+    collection(db, "questions"),
+
+    snapshot => {
+      container.replaceChildren();
+
+      const filtered = snapshot.docs.filter(d => {
+        const q = d.data();
+
+        return q.subject === selectedSubject &&
+          q.unit === selectedUnit &&
+          q.marks === selectedMarks;
+      });
+
+      if (filtered.length === 0) {
+        status.textContent = "No questions added yet.";
+        return;
+      }
+
+      status.textContent = filtered.length + " questions";
+
+      filtered.forEach((question, index) => {
+        const data = question.data();
+
+        const card = document.createElement("div");
+        card.className = "question";
+
+        const text = document.createElement("p");
+        text.textContent = (index + 1) + ". " + data.text;
+
+        card.appendChild(text);
+
+        if (isAdmin) {
+          const edit = document.createElement("button");
+          edit.textContent = "Edit";
+          edit.onclick = () => editQuestion(question.id, data.text);
+
+          const remove = document.createElement("button");
+          remove.textContent = "Delete";
+          remove.className = "danger";
+          remove.onclick = () => removeQuestion(question.id);
+
+          card.append(edit, remove);
+        }
+
+        container.appendChild(card);
+      });
+    },
+
+    error => {
+      status.textContent = "Error loading questions: " + error.message;
+    }
+  );
+}
+
+async function addQuestion() {
+  const input = document.getElementById("newQuestion");
+  const text = input.value.trim();
+
+  if (!text) {
+    alert("Please enter a question.");
+    return;
+  }
+
+  if (!isAdmin) return;
+
+  try {
+    await addDoc(collection(db, "questions"), {
+      subject: selectedSubject,
+      unit: selectedUnit,
+      marks: selectedMarks,
+      text: text,
+      createdAt: serverTimestamp()
+    });
+
+    input.value = "";
+    alert("Question saved successfully!");
+
+  } catch (error) {
+    alert("Error saving question: " + error.message);
+  }
+}
+
+async function editQuestion(id, oldText) {
+  if (!isAdmin) return;
+
+  const updated = prompt("Edit your question:", oldText);
+
+  if (updated === null || !updated.trim()) return;
+
+  try {
+    await updateDoc(doc(db, "questions", id), {
+      text: updated.trim()
+    });
+
+    alert("Question updated!");
+
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
+
+async function removeQuestion(id) {
+  if (!isAdmin) return;
+
+  if (!confirm("Are you sure you want to delete this question?")) {
+    return;
+  }
+
+  try {
+    await deleteDoc(doc(db, "questions", id));
+    alert("Question deleted!");
+
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
+
+function openLogin() {
+  document.getElementById("loginForm").reset();
+  document.getElementById("loginStatus").textContent = "";
+  show("login");
+}
+
+async function login(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const status = document.getElementById("loginStatus");
+
+  status.textContent = "Logging in...";
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+
+  } catch (error) {
+    status.textContent = "Login failed: " + error.message;
+  }
+}
+
+async function logout() {
+  await signOut(auth);
+  goHome();
+}
+
+onAuthStateChanged(auth, user => {
+  isAdmin = !!user && user.uid === ADMIN_UID;
+
+  document.getElementById("adminButton").classList.toggle(
+    "hidden", isAdmin
+  );
+
+  document.getElementById("logoutButton").classList.toggle(
+    "hidden", !user
+  );
+
+  document.getElementById("adminForm").classList.toggle(
+    "hidden", !isAdmin
+  );
+
+  if (user && !isAdmin) {
+    signOut(auth);
+    alert("You are not authorized as an administrator.");
+    return;
+  }
+
+  if (document.getElementById("questions").classList.contains("hidden") === false) {
+    loadQuestions();
+  }
+});
+
+function goHome() {
+  show("home");
+}
+
+function goUnits() {
+  show("units");
+}
+
+function goMarks() {
+  show("marks");
+}
+
+document.getElementById("loginForm").addEventListener("submit", login);
 
 renderSubjects();
+
+window.openLogin = openLogin;
+window.logout = logout;
+window.goHome = goHome;
+window.goUnits = goUnits;
+window.goMarks = goMarks;
+window.showQuestions = showQuestions;
+window.addQuestion = addQuestion;
+window.editQuestion = editQuestion;
+window.removeQuestion = removeQuestion;
+
 </script>
+
 </body>
 </html>
